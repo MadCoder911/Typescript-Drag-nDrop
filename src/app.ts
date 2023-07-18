@@ -1,5 +1,25 @@
 // Code goes here!
 
+//Validation
+
+const validate = (titleArr: string[], minLength: number) => {
+  let stop: boolean = false;
+  // Check for the people number
+  if (+titleArr[2] < 1 || +titleArr[2] > 5) {
+    stop = true;
+    return stop;
+  }
+  //Check for array pieces length
+  for (let i = 0; i < titleArr.length - 1; i++) {
+    if (titleArr[i].length < minLength) {
+      stop = true;
+      break;
+    }
+  }
+
+  return stop;
+};
+
 // autobint decorator
 
 function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
@@ -57,10 +77,37 @@ class ProjectInput {
     this.attach();
     this.configure();
   }
+  private clearInputs() {
+    this.titleInputElement.value = "";
+    this.descriptionInputElement.value = "";
+    this.peopleInputElement.value = "";
+  }
+  //
+  private gatherUserInput(): [string, string, number] | void {
+    const enteredTitle = this.titleInputElement.value;
+    const enteredDescription = this.descriptionInputElement.value;
+    const enteredPeople = this.peopleInputElement.value;
+    //
+    //
+    //
+    if (validate([enteredTitle, enteredDescription, enteredPeople], 5)) {
+      alert("invalid input");
+
+      //
+    } else {
+      this.clearInputs();
+      return [enteredDescription, enteredDescription, +enteredPeople];
+    }
+  }
+  //
   @autobind
   private submitHandler(e: Event) {
     e.preventDefault();
-    console.log(this.titleInputElement.value);
+    const userInput = this.gatherUserInput();
+    if (Array.isArray(userInput)) {
+      const [title, desc, people] = userInput;
+      console.log(title, desc, people);
+    }
   }
 
   private configure() {
